@@ -2,30 +2,32 @@ package leetcode
 
 func isValidBST(root *TreeNode) bool {
 
-	stack := []*TreeNode{}
+	nodes := []int{}
 
-	for {
-		if root == nil && len(stack) == 0 {
-			break
-		} else if root == nil && len(stack) != 0 {
-			root = stack[0]
-			stack = stack[1:]
-			continue
+	var handle func(root *TreeNode)
+
+	handle = func(root *TreeNode) {
+		if root == nil {
+			return
 		}
 
-		if root.Left != nil {
-			stack = append(stack, root.Left)
-			if root.Left.Val > root.Val {
-				return false
-			}
-		}
-		if root.Right != nil {
-			stack = append(stack, root.Right)
-			if root.Right.Val < root.Val {
-				return false
-			}
-		}
+		handle(root.Left)
+		nodes = append(nodes, root.Val)
+		handle(root.Right)
 	}
 
-	return true
+	handle(root)
+
+	if len(nodes) <= 1 {
+		return true
+	}
+
+	for i, j := 0, 1; j < len(nodes); {
+		if nodes[i] >= nodes[j] {
+			return false
+		}
+		i++
+		j++
+	}
+	return false
 }
