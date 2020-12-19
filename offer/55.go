@@ -14,43 +14,33 @@ func maxDepth(root *TreeNode) int {
 		return 0
 	}
 
-	handle := func() int {
+	maxDepth := 0
+	depth := 0
+	stack := []*TreeNode{}
+	for len(stack) != 0 || root != nil {
 
-		left := maxDepth(root.Left)
-		right := maxDepth(root.Right)
-
-		if left > right {
-			return left + 1
-		} else {
-			return right + 1
+		for root != nil {
+			stack = append(stack, root)
+			root = root.Left
+			depth += 1
 		}
-	}
 
-	handle = func() int {
-
-		max := 0
-		stack := []*TreeNode{}
-		depth := 0
-		for root != nil || len(stack) != 0 {
-			for root != nil {
-				stack = append(stack, root)
-				root = root.Left
-				root++
-			}
-			if depth > max {
-				max = depth
-			}
-
+		if len(stack) != 0 {
 			root = stack[len(stack)-1]
-			if root.Right == nil {
-				stack = stack[0 : len(stack)-1]
-				depth--
-			} else {
-				root = root.Right
-			}
-		}
+			stack = stack[0 : len(stack)-1]
 
+			if root.Left == nil && root.Right == nil && depth > maxDepth {
+				maxDepth = depth
+			}
+
+			root = root.Right
+			if root == nil {
+				depth--
+			}
+
+		}
 	}
 
-	return handle()
+	return maxDepth
+
 }
