@@ -15,6 +15,14 @@ func Test_findNthDigit(t *testing.T) {
 			args: args{n: 3},
 			want: 3,
 		},
+		{
+			args: args{n: 11},
+			want: 0,
+		},
+		{
+			args: args{n: 19},
+			want: 4,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

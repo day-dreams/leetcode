@@ -1,43 +1,25 @@
 package offer
 
+import "fmt"
+
 func findNthDigit(n int) int {
 
-	cur := 1
-	x := 0
+	cur := 0
+	bits := -1
 
-	n = n + 1
-	bits := func(x int) int {
+	for bits < n {
 
-		if x == 0 {
-			return 1
-		}
-		rv := 0
-		for x > 0 {
-			rv++
-			x = x / 10
-		}
-
-		return rv
-	}
-
-	for cur < n {
-
-		more := bits(x)
-		if cur+more == n {
-			return x % 10
-		} else if cur+more < n {
-			cur += more
-			x++
+		fmt.Printf("got bits:%v\n", bits)
+		str := fmt.Sprint(cur)
+		if len(str)+bits < n {
+			cur++
+			bits += len(str)
 			continue
 		}
 
-		// 从右往左数，x的第bit位
-		bit := more - (n - cur)
-		for bit > 0 {
-			x = x / 10
-			bit--
-		}
-		return x % 10
+		// find x th bit of cur
+		index := n - bits
+		return int(str[index-1] - '0')
 
 	}
 

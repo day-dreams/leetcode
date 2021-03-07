@@ -5,28 +5,37 @@ func myPow(x float64, n int) float64 {
 		return 1
 	}
 
-	raw := n
+	rv := float64(1)
+	cur := float64(1)
+	old := n
 	if n < 0 {
 		n = -n
 	}
 
-	rv := float64(1)
-	X := x
-
+	i := 0
 	for n > 0 {
 
 		bit := n & 1
-		if bit == 1 {
-			rv = rv * X
-		}
-		X *= X
 
+		if i == 0 {
+			cur = x
+		} else {
+			cur = cur * cur
+		}
+
+		if bit == 1 {
+			rv *= cur
+		}
+
+		i++
 		n = n >> 1
+
 	}
 
-	if raw < 0 {
+	if old < 0 {
 		return 1 / rv
 	}
+
 	return rv
 
 }
