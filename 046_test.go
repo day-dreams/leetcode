@@ -19,7 +19,14 @@ func Test_permute(t *testing.T) {
 			args: args{
 				nums: []int{1, 2, 3},
 			},
-			want: [][]int{},
+			want: [][]int{
+				{1, 2, 3},
+				{1, 3, 2},
+				{2, 1, 3},
+				{2, 3, 1},
+				{3, 2, 1},
+				{3, 1, 2},
+			},
 		},
 	}
 	for _, tt := range tests {
