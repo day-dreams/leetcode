@@ -1,10 +1,5 @@
 package hot100
 
-type ListNode struct {
-	Val  int
-	Next *ListNode
-}
-
 func getIntersectionNode(headA, headB *ListNode) *ListNode {
 	var (
 		countA, countB int
