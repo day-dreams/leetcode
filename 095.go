@@ -16,43 +16,37 @@ type TreeNode struct {
 }
 
 func generateTrees(n int) []*TreeNode {
-	if n == 0 {
-		return []*TreeNode{}
+	if n == 1 {
+		return []*TreeNode{{Val: 1}}
 	}
-	dp := make([][]*TreeNode, n+3)
-	dp[0] = []*TreeNode{nil}
-	dp[1] = []*TreeNode{{Val: 1}}
-	dp[2] = []*TreeNode{
-		{Val: 1, Right: &TreeNode{Val: 2}},
-		{Val: 2, Left: &TreeNode{Val: 1}},
+	var nums []int
+	for i := 0; i < n; i++ {
+		nums = append(nums, i+1)
 	}
+	return generateTree(nums)
+}
 
-	if n <= 2 {
-		return dp[n]
+func generateTree(values []int) []*TreeNode {
+	if len(values) == 0 {
+		return []*TreeNode{nil}
 	}
-
-	for x := 3; x <= n; x++ {
-		dp[x] = []*TreeNode{}
-		for i := 1; i <= x; i++ {
-			left, right := dp[i-1], dp[x-i]
-			for _, node1 := range left {
-				for _, node2 := range right {
-					dp[x] = append(dp[x], &TreeNode{Val: i, Left: node1, Right: add(node2, i)})
+	if len(values) == 1 {
+		return []*TreeNode{{Val: values[0]}}
+	}
+	var rv []*TreeNode
+	for i := 0; i < len(values); i++ {
+		lefts := generateTree(values[0:i])
+		rights := generateTree(values[i+1:])
+		for leftIndex := 0; leftIndex < len(lefts); leftIndex++ {
+			for rightIndex := 0; rightIndex < len(rights); rightIndex++ {
+				root := &TreeNode{
+					Val: values[i],
 				}
+				root.Left = lefts[leftIndex]
+				root.Right = rights[rightIndex]
+				rv = append(rv, root)
 			}
 		}
 	}
-
-	return dp[n]
-}
-
-func add(root *TreeNode, i int) *TreeNode {
-	if root == nil {
-		return nil
-	}
-
-	rv := &TreeNode{Val: root.Val + i}
-	rv.Left = add(root.Left, i)
-	rv.Right = add(root.Right, i)
 	return rv
 }

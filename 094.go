@@ -1,42 +1,49 @@
 package leetcode
 
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
 func inorderTraversal(root *TreeNode) []int {
+	return inorderTraversal2(root)
+}
+
+// 递归
+func inorderTraversal1(root *TreeNode) []int {
+	var rv []int
 	if root == nil {
 		return nil
 	}
+	rv = append(rv, inorderTraversal1(root.Left)...)
+	rv = append(rv, root.Val)
+	rv = append(rv, inorderTraversal1(root.Right)...)
+	return rv
+}
 
-	rv := []int{}
-	stack := []*TreeNode{}
-	for {
-		// push it
-		if root != nil {
-			stack = append(stack, root)
-			root = root.Left
-			continue
+// 非递归
+func inorderTraversal2(root *TreeNode) []int {
+	var (
+		rv      []int
+		parents []*TreeNode
+		current *TreeNode = root
+	)
+	if root == nil {
+		return nil
+	}
+	for current != nil {
+		parents = append(parents, current)
+		current = current.Left
+	}
+
+	for len(parents) != 0 {
+
+		// pop one
+		current = parents[len(parents)-1]
+		parents = parents[0 : len(parents)-1]
+		rv = append(rv, current.Val)
+		current = current.Right
+
+		// continue to leftest
+		for current != nil {
+			parents = append(parents, current)
+			current = current.Left
 		}
-
-		// no more elements
-		if len(stack) == 0 {
-			break
-		}
-
-		// pop it
-		root = stack[len(stack)-1]
-		stack = stack[0 : len(stack)-1]
-
-		// print it
-		rv = append(rv, root.Val)
-
-		// continue to right
-		root = root.Right
 	}
 
 	return rv
